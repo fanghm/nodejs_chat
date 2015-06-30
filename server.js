@@ -15,6 +15,7 @@ var server = http.createServer(function(request, response) {
 
 	var absPath = './' + filePath;
 	console.log('request[' + request.url + '] -> file[' + absPath + ']');
+	
 	serveStatic(response, cache, absPath);
 });
 

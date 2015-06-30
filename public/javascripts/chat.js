@@ -25,16 +25,16 @@ Chat.prototype.processCommand = function(command) {
 	var message = false;
 	switch(command) {
 		case 'join':
-		words.shift();
-		var room = words.join(' ');
-		this.changeRoom(room);
-		break;
+    		words.shift();
+    		var room = words.join(' ');
+    		this.changeRoom(room);
+    		break;
 
 		case 'nick':
-		words.shift();
-		var name = words.join(' ');
-		this.socket.emit('nameAttempt', name);
-		break;
+    		words.shift();
+    		var name = words.join(' ');
+    		this.socket.emit('nameAttempt', name);
+    		break;
 
 		default:
 		message = 'Unrecognized command: ' + command;
