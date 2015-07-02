@@ -3,22 +3,27 @@ function divEscapedContentElement(message) {
 }
 
 function divSystemContentElement(message) {
-    return $('<div></div>').html('<i>' + message + '</i>');
+    return $('<div></div>').addClass('sysmsg').html(message);
 }
 
 function processUserInput(chatApp, socket) {
 	var message = $('#send-message').val();
-    var sysMessage;
+    if (message.length === 0 || !message.trim())    // blank or white-space only
+        return;
     
     if (message.charAt(0) == '/') {
-        sysMessage = chatApp.processCommand(message);
+        var sysMessage = chatApp.processCommand(message);
         if (sysMessage) {
             $('#messages').append(divSystemContentElement(sysMessage));
         }
     } else {
     	chatApp.sendMessage($('#room').text(), message);
-    	$('#messages').append(divEscapedContentElement(message));
-    	$('#messages').scrollTop($('#messages').prop('ScrollHeight'));
+    	$('#messages').append(divEscapedContentElement('Me: ' + message));
+
+        // scroll to to bottom, strange only the 2nd way work
+        // refer: http://stackoverflow.com/questions/10503606/scroll-to-bottom-of-div-on-page-load-jquery
+    	// $('#messages').scrollTop( $('#messages').prop('ScrollHeight') );
+        $('#messages').scrollTop( $('#messages')[0].scrollHeight);
     }
 
 	$('#send-message').val('');
@@ -29,7 +34,7 @@ $(document).ready(function() {
 	var chatApp = new Chat(socket);
 
     setInterval(function() {
-        socket.emit('refreshRooms'); //, io.sockets.manager.rooms
+        socket.emit('refreshRooms');
     }, 1000);
 
 	socket.on('nameResult', function(result) {
@@ -54,18 +59,24 @@ $(document).ready(function() {
 	});
 
 	socket.on('rooms', function(rooms) {
+        $('#messages').scrollTop( $('#messages')[0].scrollHeight);  // scroll messsages to bottom by the way
+
 		$('#room-list').empty();
-        socket.emit('message', {text: 'on rooms'});
 
 		for (var room in rooms) {
-			//room = room.substring(1, room.length); //???
-			//if (room != '') {
-				$('room-list').append(divEscapedContentElement(room));
-			//}
+			room = room.substring(1, room.length); // room starts with '/'
+			if (room != '') {
+				$('#room-list').append(divEscapedContentElement(room));
+			}
 		}
 
 		$('#room-list div').click(function() {
-			chatApp.processCommand('/join ' + $(this).text());
+            if ($('#room').text() === $(this).text()) {
+                //$('#messages').append($('<div></div>').text('You are already in this room'));
+            } else {
+			    chatApp.processCommand('/join ' + $(this).text());
+            }
+
 			$('#send-message').focus();
 		});
 	});
