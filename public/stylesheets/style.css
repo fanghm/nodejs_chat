@@ -3,8 +3,9 @@ body {
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-	color: #00B7FF;
+.sysmsg {
+	color: #fff;
+    font-style:italic;
 }
 
 #content: {
@@ -19,9 +20,9 @@ a {
 }
 
 #messages {
-	width: 690px;
+    witdh: auto;
 	height: 300px;
-	overflow: auto;
+	overflow: scroll;
 	background-color: #eee;
 	margin-bottom: 1em;
 	margin-right: 10px;
@@ -29,11 +30,10 @@ a {
 
 #room-list {
     float: right;
-    width: 100px;
+    min-width: 100px;
     height: 300px;
     overflow: auto;
-    color: white;
-    background-color: #df4b4b;
+    background-color: #ddd;
 }
 
 #room-list div {
@@ -41,7 +41,7 @@ a {
 }
 
 #room-list div:hover {
-    background-color: #ddd;
+    background-color: #ccc;
 }
 
 #send-message {
@@ -49,6 +49,8 @@ a {
     margin-bottom: 1em;
     margin-right: 1em;
 }
+
 #help {
-    font: 11px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
